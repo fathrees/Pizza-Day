@@ -1,0 +1,50 @@
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#">
+		        <img alt="Pizza Day" src="">
+		      </a>
+		    </div>
+		    <ul class="nav navbar-nav">
+		      	<li class="active"><a href="groups">Groups</a></li>
+		      	<li class=""><a href="groups">Groups</a></li>
+		     </ul>
+		    <ul class="nav navbar-nav navbar-right">
+    			<p class="navbar-text">{{> loginButtons align="right"}}</p>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		{{#if currentUser}}
+			<div class="row">
+				<div class="head-title">
+					<span class="heading">Groups</span>
+					<button type="button" class="add-group btn btn-primary" title="New Group">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</div>
+			</div>
+			{{#if showAddForm}}
+				{{> groupAddForm}}
+			{{/if}}
+			{{#if noGroups}}
+				<h4>No group doesn't exist</h4>
+			{{else}}
+				<table class="table table-striped table-hover">
+					<thead>
+						<th>Logo</th>
+						<th>Name</th>
+						<th>Owner</th>
+					</thead>
+					<tbody>
+						{{#each groups}}
+							{{> group}}
+						{{/each}}
+					</tbody>
+				</table>
+			{{/if}}
+		{{else}}<h2>Please, sign in!</h2>
+		{{/if}}
+	</div>
+</body>

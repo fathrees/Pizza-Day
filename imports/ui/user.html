@@ -1,0 +1,11 @@
+<template name="user">
+	<option class="user-option" value="{{_id}}" disabled="{{disabled}}">
+		{{username}}&nbsp;
+		{{#if isOwner}}
+			- is yourself
+		{{/if}}
+		{{#if group}}
+			&nbsp;- group: {{group}}
+		{{/if}}
+	</option>
+</template>

@@ -1,0 +1,18 @@
+<template name="group">
+	<tr class="group">
+		{{#if collapsedGroup}}
+			<td><img src="{{logo}}"></td>
+			<td>{{name}}</td>
+			<td>{{ownerName}}</td>
+			<td>
+				{{#if isOwner}}
+					<div class="del-group" title="Remove group">
+						<span class="glyphicon glyphicon-remove"></span>
+					</div>
+				{{/if}}
+			</td>
+		{{else}}
+			<td colspan="4">{{> groupShowForm}}</td>
+		{{/if}}
+	</tr>
+</template>

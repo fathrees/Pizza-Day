@@ -1,0 +1,70 @@
+<template name="groupShowForm">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<form id="show-group" class="new-group row" enctype="multipart/form-data" method="post">
+				<div class="form-group col-md-4">
+					<!-- <label for="logo">Logo</label>
+					<input id="logo" type="file" name="img" accept="image/*,image/jpeg"> -->
+					<img src="{{#if this.logo}}{{this.logo}}{{else}}/img/no-logo.png{{/if}}">
+				</div>
+				<div class="col-md-8">
+					<div class="row">
+						<div class="form-group col-sm-7">
+							<label for="name" class="sr-only"></label>
+							<input id="name" type="text" name="name" class="form-control input-lg" placeholder="Name" value="{{this.name}}" required disabled>
+						</div>
+						<div class="col-sm-5"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row panel-body">
+			<div class="form-group col-md-5">
+				<label>Participants</label>
+				{{#if isOwner}}
+					<button class="add-participants btn btn-sm btn-primary" title="Add participants">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button><br>
+				{{/if}}
+
+				{{#each this.participants}}
+					{{> participant}}
+				{{/each}}
+
+				{{#if addParticipants}}
+					<br><label for="participantsShow">Select participants</label>
+					<select id="participantsShow" multiple class="form-control">
+						{{#each users}}
+							{{> user}}
+						{{/each}}
+					</select>
+				{{/if}}
+			</div>
+			<div class="col-md-7">
+				<div class="row">
+					<div class="col-sm-5">
+						<label>Add menu item</label>
+					</div>
+					<div class="col-sm-2">
+						<label>Price</label>
+					</div>
+					<div class="col-sm-3 center-align">
+						<label>Coupon available</label>
+					</div>
+					<div class="right-align col-sm-2">
+						<button class="add-menu-item btn btn-sm btn-primary" title="One more">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</div>
+				</div>
+				<!-- {{#each menu}}
+					{{> menuItem}}
+				{{/each}} -->
+			</div>
+		</div>
+		<div class="panel-footer panel-info">
+			<button form="add-group" type="submit" class="btn-named btn btn-primary">Save</button>
+			<button type="button" class="hide-form btn-named btn btn-default">Cancel</button>
+		</div>
+	</div>
+</template>

@@ -1,0 +1,69 @@
+/* CSS declarations go here */
+
+.navbar-inverse {
+	background-color: #d9edf7;
+	border-color: #d9edf7;
+	border-radius: 0px;
+}
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
+    color: #337ab7;
+}
+
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus,
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: #FFC107;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: #fff;
+    background-color: #337ab7;
+    border-radius: 4px;
+}
+
+.panel > div {padding: 10px 30px}
+
+.panel-footer {
+	background-color: #d9edf7;
+	text-align: center;
+}
+
+.head-title {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.heading {
+	font-size: 25px;
+	margin-right: 15px;
+}
+
+.add-group {margin-top: -8px}
+
+.form-group {margin-bottom: 0px}
+
+.menu-item > .form-group {margin-bottom: 10px}
+
+.add-menu-item, .add-participant {margin-top: -5px}
+
+.delete {
+	margin-top: 10px;
+	margin-right: 10px;
+}
+
+.delete:hover, .del-group:hover {
+	color: #337ab7;
+	cursor: pointer;
+}
+
+select#participants {margin-bottom: 10px}
+
+.menu-item input[type=checkbox] {margin-top: 10px}
+
+.right-align {text-align: right}
+
+.center-align {text-align: center}
+
+.btn-named {
+	width: 70px;
+}
