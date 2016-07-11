@@ -29,10 +29,17 @@ Meteor.methods({
 			ownerName: Meteor.users.findOne(this.userId).username
 		});
 	},
-	'groups.update'(groupId, participants) {
+	'groups.update.participants'(groupId, participants) {
 		Groups.update(groupId, {
 			$set: {
 				participants: participants
+			}
+		});
+	},
+	'groups.update.menu'(groupId, menu) {
+		Groups.update(groupId, {
+			$set: {
+				menu: menu
 			}
 		});
 	},
@@ -43,7 +50,7 @@ Meteor.methods({
 
 		Groups.remove(groupId);
 	},
-	'users.updateGroup'(userId, groupId, groupName) {
+	'users.update.group'(userId, groupId, groupName) {
 		Meteor.users.update(userId, {
 			$set: {
 				groupId: groupId,

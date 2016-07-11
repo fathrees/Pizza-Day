@@ -44,7 +44,9 @@
 
 .menu-item > .form-group {margin-bottom: 10px}
 
-.add-menu-item, .add-participant {margin-top: -5px}
+.add-menu-item, .add-participants {margin-top: -5px}
+
+.add-participants{margin-bottom: 5px}
 
 .delete {
 	margin-top: 10px;
@@ -64,6 +66,18 @@ select#participants {margin-bottom: 10px}
 
 .center-align {text-align: center}
 
-.btn-named {
-	width: 70px;
+.btn-named {width: 70px}
+
+.cancel-change-logo {
+	margin-left: -50px;
+	margin-top: 20px;
+
 }
+
+input[name=name].input-lg, .change-name, img#logo, .change-logo {
+	margin-top: 5px;
+}
+
+.change-name {margin-left: -25px}
+
+.paticipants-list {margin-top: 8px}

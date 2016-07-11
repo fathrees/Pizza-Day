@@ -1,8 +1,11 @@
 <template name="participant">
+	<span class="glyphicon glyphicon-user"></span>
 	{{username}}
+
 	{{#if isYourself}}
-		<i> - is yourself</i><br>
+		<i> - yourself</i>&nbsp;
 	{{/if}}
+
 	{{#if isOwner}}
 		{{#unless isYourself}}
 			<span class="delete del-participant" title="Remove participant">

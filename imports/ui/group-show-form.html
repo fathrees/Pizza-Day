@@ -1,17 +1,42 @@
 <template name="groupShowForm">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<form id="show-group" class="new-group row" enctype="multipart/form-data" method="post">
-				<div class="form-group col-md-4">
-					<!-- <label for="logo">Logo</label>
-					<input id="logo" type="file" name="img" accept="image/*,image/jpeg"> -->
-					<img src="{{#if this.logo}}{{this.logo}}{{else}}/img/no-logo.png{{/if}}">
+			<form id="show-group" class="show-group row" enctype="multipart/form-data" method="post">
+				<div class="form-group col-md-3">
+					{{#if changeLogo}}
+						<label for="logoShow">Logo</label>
+						<input id="logoShow" type="file" accept="image/*,image/jpeg">
+					{{else}}
+						<img id="logo" src="{{#if this.logo}}{{this.logo}}{{else}}/img/no-logo.png{{/if}}">
+					{{/if}}
+
+					{{#if isOwner}}
+						{{#unless changeLogo}}
+							<button class="change-logo btn btn-sm btn-info" title="Change logo">
+								<span class="glyphicon glyphicon-picture"></span>
+							</button>
+						{{/unless}}
+					{{/if}}
+				</div>
+				<div class="col-md-1">
+					{{#if changeLogo}}
+						<button class="cancel-change-logo btn btn-sm btn-default" title="Cancel changing">
+								<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					{{/if}}
 				</div>
 				<div class="col-md-8">
 					<div class="row">
-						<div class="form-group col-sm-7">
-							<label for="name" class="sr-only"></label>
-							<input id="name" type="text" name="name" class="form-control input-lg" placeholder="Name" value="{{this.name}}" required disabled>
+						<div class="form-group col-sm-6">
+							<label for="nameShow" class="sr-only"></label>
+							<input id="nameShow" type="text" name="name" class="form-control input-lg" placeholder="Name" value="{{this.name}}" required disabled={{changeNameDisabled}}>
+						</div>
+						<div class="col-sm-1">
+							{{#if isOwner}}
+								<button class="change-name btn btn-lg btn-info" title="Change name">
+									<span class="glyphicon glyphicon-edit"></span>
+								</button>
+							{{/if}}
 						</div>
 						<div class="col-sm-5"></div>
 					</div>
@@ -20,19 +45,27 @@
 		</div>
 		<div class="row panel-body">
 			<div class="form-group col-md-5">
-				<label>Participants</label>
-				{{#if isOwner}}
-					<button class="add-participants btn btn-sm btn-primary" title="Add participants">
-						<span class="glyphicon glyphicon-plus"></span>
-					</button><br>
-				{{/if}}
+				<div class="row">
+					<div class="col-sm-4">
+						{{#if isOwner}}
+							<button class="add-participants btn btn-sm btn-info" title="Add participants">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						{{/if}}
+					</div>
+					<div class="col-sm-8">
+						<label>Participants</label><br>
+					</div>
+				</div>
 
 				{{#each this.participants}}
 					{{> participant}}
 				{{/each}}
 
 				{{#if addParticipants}}
-					<br><label for="participantsShow">Select participants</label>
+					<div class="paticipants-list center-align">
+						<label for="participantsShow" class="">Select participants</label>
+					</div>
 					<select id="participantsShow" multiple class="form-control">
 						{{#each users}}
 							{{> user}}
@@ -43,7 +76,7 @@
 			<div class="col-md-7">
 				<div class="row">
 					<div class="col-sm-5">
-						<label>Add menu item</label>
+						<label>Menu</label>
 					</div>
 					<div class="col-sm-2">
 						<label>Price</label>
@@ -52,18 +85,18 @@
 						<label>Coupon available</label>
 					</div>
 					<div class="right-align col-sm-2">
-						<button class="add-menu-item btn btn-sm btn-primary" title="One more">
+						<button class="add-menu-item btn btn-sm btn-info" title="One more">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
 					</div>
 				</div>
-				<!-- {{#each menu}}
+				{{#each this.menu}}
 					{{> menuItem}}
-				{{/each}} -->
+				{{/each}}
 			</div>
 		</div>
 		<div class="panel-footer panel-info">
-			<button form="add-group" type="submit" class="btn-named btn btn-primary">Save</button>
+			<button form="show-group" type="submit" class="btn-named btn btn-primary">Save</button>
 			<button type="button" class="hide-form btn-named btn btn-default">Cancel</button>
 		</div>
 	</div>

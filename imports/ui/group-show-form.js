@@ -3,13 +3,11 @@ import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './group-show-form.html';
-// import './menu-item.js';
+import './menu-item.js';
 import './participant.js';
 
 Template.groupShowForm.onCreated(function bodyOnCreated() {
   this.state = new ReactiveDict();
-  const instance = Template.instance();
-  instance.state.set('add participants', false);
 });
 
 Template.groupShowForm.helpers({
@@ -22,13 +20,21 @@ Template.groupShowForm.helpers({
 	},
 	users() {
 		return Meteor.users.find({});
+	},
+	changeLogo() {
+		const instance = Template.instance();
+		return instance.state.get('change logo');
+	},
+	changeNameDisabled() {
+		const instance = Template.instance();
+		return !instance.state.get('change name');
 	}
 });
 
 Template.groupShowForm.events({
-	'click .add-participants'() {
-		const instance = Template.instance();
-  		instance.state.set('add participants', true);
+	'click .add-participants'(event, instance) {
+  		const state = instance.state.get('add participants');
+  		instance.state.set('add participants', !state);
 	},
 	'click .user-option'() {
 		const groupId = Template.parentData(0)._id;
@@ -40,7 +46,20 @@ Template.groupShowForm.events({
 			username: this.username
 		});
 
-		Meteor.call('groups.update', groupId, participants);
-		Meteor.call('users.updateGroup', this._id, groupId, groupName);
+		Meteor.call('groups.update.participants', groupId, participants);
+		Meteor.call('users.update.group', this._id, groupId, groupName);
+	},
+	'click .change-logo'(event, instance) {
+  		event.preventDefault();
+  		instance.state.set('change logo', true);
+	},
+	'click .cancel-change-logo'(event, instance) {
+  		event.preventDefault();
+  		instance.state.set('change logo', false);
+	}, 
+	'click .change-name'(event, instance) {
+  		event.preventDefault();
+  		const state = instance.state.get('change name');
+  		instance.state.set('change name', !state);
 	}
 });     

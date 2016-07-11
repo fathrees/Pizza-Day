@@ -4,6 +4,7 @@ import { Random } from 'meteor/random';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './group-add-form.html';
+import './menu-item.js';
 
 export const Menu = new Mongo.Collection(null);
 
@@ -55,7 +56,7 @@ Template.groupAddForm.events({
 		const menu = [];
 		const menuStarts = 3;
 		const menuInputsCount = 3;
-		for (i = menuStarts; i < target.length - 1; i += 3) {
+		for (i = menuStarts; i < target.length - 1; i += menuInputsCount) {
 			let menuItem = {
 				meal: target[i].value,
 				price: target[i + 1].valueAsNumber,
@@ -63,6 +64,8 @@ Template.groupAddForm.events({
 			};
 			menu.push(menuItem);
 		}
+
+		console.log(menu);
 
 		Meteor.call('groups.insert', groupId, logo, groupName, participants, menu);
 
