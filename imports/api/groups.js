@@ -30,45 +30,21 @@ Meteor.methods({
 		});
 	},
 	'groups.update.logo'(groupId, logo) {
-		Groups.update(groupId, {
-			$set: {
-				logo: logo
-			}
-		});
+		Groups.update(groupId, { $set: { logo: logo } });
 	},
 	'groups.update.name'(groupId, name) {
-		Groups.update(groupId, {
-			$set: {
-				name: name
-			}
-		});
+		Groups.update(groupId, { $set: { name: name } });
 	},
 	'groups.update.participants'(groupId, participants) {
-		Groups.update(groupId, {
-			$set: {
-				participants: participants
-			}
-		});
+		Groups.update(groupId, { $set: { participants: participants } });
 	},
 	'groups.update.menu'(groupId, menu) {
-		Groups.update(groupId, {
-			$set: {
-				menu: menu
-			}
-		});
+		Groups.update(groupId, { $set: { menu: menu } });
 	},
 	'groups.remove'(groupId) {
-		//HOW TO UPDATE ALL USERS, THAT ATTACHED TO GROUP IS REMOVED?
-		//const toUpdate = Meteor.users.find({groupId: groupId});
-		//const count = Meteor.users.find({groupId: groupId}).count();
 		Groups.remove(groupId);
 	},
-	'users.update.group'(userId, groupId, groupName) {
-		Meteor.users.update(userId, {
-			$set: {
-				groupId: groupId,
-				groupName: groupName
-			}
-		});
+	'users.update.groups'(userId, groups) {
+		Meteor.users.update(userId, { $set: { groups: groups } });
 	}
 });   

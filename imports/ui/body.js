@@ -23,8 +23,7 @@ Template.body.helpers({
 		return Groups.find({}).count() === 0;
 	},
 	showAddForm() {
-		const instance = Template.instance();
-		return instance.state.get('showAddForm');
+		return Template.instance().state.get('showAddForm');
 	}
 });
 

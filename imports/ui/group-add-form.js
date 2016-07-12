@@ -25,29 +25,40 @@ Template.groupAddForm.events({
 	},
 	'submit .new-group'(event) { 
 		event.preventDefault();
-		const groupId = Random.id();
 		const target = event.target;
-		const logo = target.logo.value;
+		const groupId = Random.id();
 		const groupName = target.name.value;
-		const owner = {
-			userId: Meteor.userId(),
-			username: Meteor.user().username
+		const group = {
+			groupId: groupId,
+			groupName: groupName
 		};
-		const participants = [owner];
+		const logo = target.logo.value;
 
-		Meteor.call('users.update.group', owner.userId, groupId, groupName);
+// code for case when owner of created group is automatically its participant
+		// const owner = {
+		// 	userId: Meteor.userId(),
+		// 	username: Meteor.user().username
+		// };
+		// const participants = [owner];
+		// const groups = Meteor.user().groups;
+		// groups.push(group);
+		// Meteor.call('users.update.groups', owner.userId, groups);
 
 		const participantsDOM = target.participants.selectedOptions;
+		const participants = [];
 		
 		for (let i = 0; i < participantsDOM.length; i++) {
 			let participantId = participantsDOM[i].value;
-			let participantUsername = Meteor.users.findOne(participantId).username;
+			let userDoc = Meteor.users.findOne(participantId);
+			let participantUsername = userDoc.username;
 			let participant = {
 				userId: participantId,
 				username: participantUsername
 			};
-			Meteor.call('users.update.group', participantId, groupId, groupName);
 			participants.push(participant);
+			const groups = userDoc.groups || [];
+			groups.push(group);
+			Meteor.call('users.update.groups', participantId, groups);
 		}
 
 		const menu = [];

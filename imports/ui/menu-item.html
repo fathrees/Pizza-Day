@@ -9,8 +9,15 @@
 		<div class="center-align form-group col-sm-3">
 			<input form="{{formId}}" type="checkbox" checked="{{this.couponAvailable}}">
 		</div>
-		{{#if visible}}
-			<div class="form-group col-sm-2 right-align">	
+		{{#if canEdit}}
+			<div class="form-group col-sm-1 right-align">	
+				<div class="delete" title="Edit item">
+					<span class="glyphicon glyphicon-edit"></span>
+				</div>
+			</div>
+		{{/if}}
+		{{#if canDel}}
+			<div class="form-group col-sm-1 right-align">	
 				<div class="delete" title="Remove item">
 					<span class="glyphicon glyphicon-remove"></span>
 				</div>
