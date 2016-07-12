@@ -10,7 +10,7 @@ Template.user.helpers({
 		//if specified group dosn't exist user is updated
 		if (this.groupId) {
 			if (!Groups.findOne(this.groupId)) {
-				Meteor.call('users.updateGroup', this._id, null, null);
+				Meteor.call('users.update.group', this._id, null, null);
 			}
 		}
 		if (this.groupId || this._id === Meteor.userId()) {

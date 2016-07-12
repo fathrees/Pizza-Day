@@ -1,11 +1,11 @@
 <template name="groupShowForm">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<form id="show-group" class="show-group row" enctype="multipart/form-data" method="post">
+			<form id="{{formId}}" class="show-group row" enctype="multipart/form-data" method="post">
 				<div class="form-group col-md-3">
 					{{#if changeLogo}}
 						<label for="logoShow">Logo</label>
-						<input id="logoShow" type="file" accept="image/*,image/jpeg">
+						<input id="logoShow" name="logo" type="file" accept="image/*,image/jpeg">
 					{{else}}
 						<img id="logo" src="{{#if this.logo}}{{this.logo}}{{else}}/img/no-logo.png{{/if}}">
 					{{/if}}
@@ -63,7 +63,7 @@
 				{{/each}}
 
 				{{#if addParticipants}}
-					<div class="paticipants-list center-align">
+					<div class="participants-list center-align">
 						<label for="participantsShow" class="">Select participants</label>
 					</div>
 					<select id="participantsShow" multiple class="form-control">
@@ -85,19 +85,25 @@
 						<label>Coupon available</label>
 					</div>
 					<div class="right-align col-sm-2">
-						<button class="add-menu-item btn btn-sm btn-info" title="One more">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
+						{{#if isParticipant}}
+							<button class="add-menu-item btn btn-sm btn-info" title="One more">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						{{/if}}
 					</div>
 				</div>
 				{{#each this.menu}}
 					{{> menuItem}}
 				{{/each}}
+				{{#unless this.menu}}
+					<div class="row center-align alert alert-info">
+						<i>No menu item</i>
+					</div>
+				{{/unless}}
 			</div>
 		</div>
 		<div class="panel-footer panel-info">
-			<button form="show-group" type="submit" class="btn-named btn btn-primary">Save</button>
-			<button type="button" class="hide-form btn-named btn btn-default">Cancel</button>
+			<button form="{{formId}}" type="submit" class="btn-named btn btn-primary">OK</button>
 		</div>
 	</div>
 </template>

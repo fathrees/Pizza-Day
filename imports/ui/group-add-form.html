@@ -2,7 +2,7 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h4 class="head-title">Create Group</h4>
-			<form id="add-group" class="new-group row" enctype="multipart/form-data" method="post">
+			<form id="addGroup" class="new-group row" enctype="multipart/form-data" method="post">
 				<div class="form-group col-md-4">
 					<label for="logo">Logo</label>
 					<input id="logo" type="file" name="img" accept="image/*,image/jpeg">
@@ -21,7 +21,7 @@
 		<div class="row panel-body">
 			<div class="form-group col-md-5">
 				<label for="participants">Select participants <i>(+ Ctrl for multiple)</i></label>
-				<select id="participants" form="add-group" multiple class="form-control">
+				<select id="participants" form="addGroup" multiple class="form-control">
 					{{#each users}}
 						{{> user}}
 					{{/each}}
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 		<div class="panel-footer panel-info">
-			<button form="add-group" type="submit" class="btn-named btn btn-primary">Save</button>
+			<button form="addGroup" type="submit" class="btn-named btn btn-primary">Save</button>
 			<button type="button" class="hide-form btn-named btn btn-default">Cancel</button>
 		</div>
 	</div>

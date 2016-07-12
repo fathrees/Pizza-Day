@@ -25,38 +25,38 @@ Template.groupAddForm.events({
 	},
 	'submit .new-group'(event) { 
 		event.preventDefault();
-
 		const groupId = Random.id();
-
 		const target = event.target;
-
 		const logo = target.logo.value;
 		const groupName = target.name.value;
-		
 		const owner = {
 			userId: Meteor.userId(),
 			username: Meteor.user().username
 		};
 		const participants = [owner];
-		Meteor.call('users.updateGroup', owner.userId, groupId, groupName);
+
+		Meteor.call('users.update.group', owner.userId, groupId, groupName);
 
 		const participantsDOM = target.participants.selectedOptions;
 		
-		for (var i = 0; i < participantsDOM.length; i++) {
+		for (let i = 0; i < participantsDOM.length; i++) {
 			let participantId = participantsDOM[i].value;
 			let participantUsername = Meteor.users.findOne(participantId).username;
 			let participant = {
 				userId: participantId,
 				username: participantUsername
 			};
-			Meteor.call('users.updateGroup', participantId, groupId, groupName);
+			Meteor.call('users.update.group', participantId, groupId, groupName);
 			participants.push(participant);
 		}
 
 		const menu = [];
-		const menuStarts = 3;
-		const menuInputsCount = 3;
-		for (i = menuStarts; i < target.length - 1; i += menuInputsCount) {
+		const start = 3;
+		const inputsCount = 3;
+		for (i = start; i < target.length - 1; i += inputsCount) {
+			if (!target[i].value) {
+				continue;
+			}
 			let menuItem = {
 				meal: target[i].value,
 				price: target[i + 1].valueAsNumber,
@@ -64,9 +64,6 @@ Template.groupAddForm.events({
 			};
 			menu.push(menuItem);
 		}
-
-		console.log(menu);
-
 		Meteor.call('groups.insert', groupId, logo, groupName, participants, menu);
 
 		target.logo.value = '';

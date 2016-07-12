@@ -15,10 +15,8 @@ Template.participant.events({
 	'click .del-participant'() {
 		const groupId = Template.parentData(1)._id;
 		const participants = Template.parentData(1).participants;
-
 		participants.splice(participants.indexOf(this), 1);
-
-		Meteor.call('groups.update', groupId, participants);
-		Meteor.call('users.updateGroup', this.userId, null, null);
+		Meteor.call('groups.update.participants', groupId, participants);
+		Meteor.call('users.update.group', this.userId, null, null);
 	}
 });

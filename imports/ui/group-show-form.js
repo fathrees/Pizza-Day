@@ -11,8 +11,15 @@ Template.groupShowForm.onCreated(function bodyOnCreated() {
 });
 
 Template.groupShowForm.helpers({
+	formId() {
+		return this._id;
+	},
 	isOwner() {
 		return this.owner === Meteor.userId();
+	},
+	isParticipant() {
+		const userId = Meteor.userId();
+		return ~this.participants.map((e) => e.userId).indexOf(userId);
 	},
 	addParticipants() {
 		const instance = Template.instance();
@@ -37,17 +44,14 @@ Template.groupShowForm.events({
   		instance.state.set('add participants', !state);
 	},
 	'click .user-option'() {
-		const groupId = Template.parentData(0)._id;
-		const participants = Template.parentData(0).participants;
-		const groupName = Template.parentData(0).name;
-
+		const group = Template.parentData(0);
+		const participants = group.participants;
 		participants.push({
 			userId: this._id,
 			username: this.username
 		});
-
-		Meteor.call('groups.update.participants', groupId, participants);
-		Meteor.call('users.update.group', this._id, groupId, groupName);
+		Meteor.call('groups.update.participants', group._id, participants);
+		Meteor.call('users.update.group', this._id, group._id, group.name);
 	},
 	'click .change-logo'(event, instance) {
   		event.preventDefault();
@@ -61,5 +65,47 @@ Template.groupShowForm.events({
   		event.preventDefault();
   		const state = instance.state.get('change name');
   		instance.state.set('change name', !state);
+	},
+	'click .add-menu-item'(event, instance) {
+  		const menu = this.menu;
+  		menu.push({});
+  		Meteor.call('groups.update.menu',this._id, menu);
+	},
+	'submit .show-group'(event, instance) {
+  		event.preventDefault();
+  		
+  		const target = event.target;
+  		const menu = [];
+		const inputsCount = 3;
+  		let menuStart;
+  		if (this.owner === Meteor.userId()) {
+  			const newName = target.name.value;
+  			const changedLogo = instance.state.get('change logo');
+
+  			if (changedLogo) {
+	  			const logo = target.logo.value;
+	  			menuStart = 4;
+	  			Meteor.call('groups.update.logo', this._id, logo);
+	  		} else {
+	  			menuStart = 3;
+	  		}
+	  		if (newName !== this.name) {
+	  			Meteor.call('groups.update.name', this._id, newName);
+	  		}
+	  	} else {
+	  		menuStart = 1;
+	  	}
+		for (let i = menuStart; i < target.length - 1; i += inputsCount) {
+			if (!target[i].value) {
+				continue;
+			}
+			let menuItem = {
+				meal: target[i].value,
+				price: target[i + 1].valueAsNumber,
+				couponAvailable: target[i + 2].checked
+			};
+			menu.push(menuItem);
+		}
+		Meteor.call('groups.update.menu',this._id, menu);
 	}
 });     

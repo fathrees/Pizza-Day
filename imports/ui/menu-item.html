@@ -1,15 +1,15 @@
 <template name="menuItem">
 	<div class="row menu-item">
 		<div class="form-group col-sm-5">
-			<input form="add-group" type="text" class="form-control" placeholder="Meal name" value="{{this.meal}}">
+			<input form="{{formId}}" type="text" class="form-control" placeholder="Meal name" value="{{this.meal}}">
 		</div>
 		<div class="form-group col-sm-2">
-			<input form="add-group" type="number" min="0.00" value="{{#if this.price}}{{this.price}}{{else}}0.00{{/if}}" step="0.01" class="form-control">
+			<input form="{{formId}}" type="number" min="0.00" value="{{#if this.price}}{{this.price}}{{else}}0.00{{/if}}" step="0.01" class="form-control">
 		</div>
 		<div class="center-align form-group col-sm-3">
-			<input form="add-group" type="checkbox" checked="{{this.couponAvailable}}">
+			<input form="{{formId}}" type="checkbox" checked="{{this.couponAvailable}}">
 		</div>
-		{{#if isCouple}}
+		{{#if visible}}
 			<div class="form-group col-sm-2 right-align">	
 				<div class="delete" title="Remove item">
 					<span class="glyphicon glyphicon-remove"></span>

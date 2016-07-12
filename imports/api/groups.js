@@ -29,6 +29,20 @@ Meteor.methods({
 			ownerName: Meteor.users.findOne(this.userId).username
 		});
 	},
+	'groups.update.logo'(groupId, logo) {
+		Groups.update(groupId, {
+			$set: {
+				logo: logo
+			}
+		});
+	},
+	'groups.update.name'(groupId, name) {
+		Groups.update(groupId, {
+			$set: {
+				name: name
+			}
+		});
+	},
 	'groups.update.participants'(groupId, participants) {
 		Groups.update(groupId, {
 			$set: {
@@ -47,7 +61,6 @@ Meteor.methods({
 		//HOW TO UPDATE ALL USERS, THAT ATTACHED TO GROUP IS REMOVED?
 		//const toUpdate = Meteor.users.find({groupId: groupId});
 		//const count = Meteor.users.find({groupId: groupId}).count();
-
 		Groups.remove(groupId);
 	},
 	'users.update.group'(userId, groupId, groupName) {

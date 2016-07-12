@@ -27,5 +27,8 @@ Template.group.events({
 	},
 	'click .group'(event, instance) {
 		instance.state.set('collapsedGroup', false);
+	},
+	'submit .show-group'(event, instance) {
+		instance.state.set('collapsedGroup', true);
 	}
 });
