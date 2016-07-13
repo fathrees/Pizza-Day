@@ -48,12 +48,9 @@
 
 .add-participants{margin-bottom: 5px}
 
-.delete {
-	margin-top: 10px;
-	margin-right: 10px;
-}
+.delete, .edit {margin-top: 10px}
 
-.delete:hover, .del-group:hover {
+.delete:hover, .del-group:hover, .edit:hover {
 	color: #337ab7;
 	cursor: pointer;
 }

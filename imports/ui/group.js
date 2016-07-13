@@ -7,7 +7,7 @@ import './group-show-form.js';
 
 Template.group.onCreated(function groupOnCreated() {
   this.state = new ReactiveDict();
-  Template.instance().state.set('collapsedGroup', true);
+  this.state.set('collapsedGroup', true);
 });
 
 Template.group.helpers({
@@ -22,14 +22,6 @@ Template.group.helpers({
 Template.group.events({
 	'click .del-group'() {
 		const group = this;
-		//remove this group from each user who is it's participant
-		// this.participants.map((participant) => participant.userId).forEach((user) => {
-		// 	console.log(user);
-		// 	let groups = Meteor.users.findOne(user).groups;
-		// 	groups.splice(groups.indexOf(group), 1);
-		// 	Meteor.call('users.update.groups', user._id, groups);
-		// 	return;
-		// });
 		Meteor.call('groups.remove', this._id);
 
 	},

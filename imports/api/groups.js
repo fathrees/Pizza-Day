@@ -43,8 +43,5 @@ Meteor.methods({
 	},
 	'groups.remove'(groupId) {
 		Groups.remove(groupId);
-	},
-	'users.update.groups'(userId, groups) {
-		Meteor.users.update(userId, { $set: { groups: groups } });
 	}
 });   

@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
-import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './group-add-form.html';
 import './menu-item.js';
@@ -28,37 +27,17 @@ Template.groupAddForm.events({
 		const target = event.target;
 		const groupId = Random.id();
 		const groupName = target.name.value;
-		const group = {
-			groupId: groupId,
-			groupName: groupName
-		};
 		const logo = target.logo.value;
-
-// code for case when owner of created group is automatically its participant
-		// const owner = {
-		// 	userId: Meteor.userId(),
-		// 	username: Meteor.user().username
-		// };
-		// const participants = [owner];
-		// const groups = Meteor.user().groups;
-		// groups.push(group);
-		// Meteor.call('users.update.groups', owner.userId, groups);
-
 		const participantsDOM = target.participants.selectedOptions;
 		const participants = [];
 		
 		for (let i = 0; i < participantsDOM.length; i++) {
 			let participantId = participantsDOM[i].value;
-			let userDoc = Meteor.users.findOne(participantId);
-			let participantUsername = userDoc.username;
-			let participant = {
+			let participantUsername = Meteor.users.findOne(participantId).username;
+			participants.push({
 				userId: participantId,
 				username: participantUsername
-			};
-			participants.push(participant);
-			const groups = userDoc.groups || [];
-			groups.push(group);
-			Meteor.call('users.update.groups', participantId, groups);
+			});
 		}
 
 		const menu = [];

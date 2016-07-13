@@ -17,24 +17,21 @@ Template.groupShowForm.helpers({
 	isOwner() {
 		return this.owner === Meteor.userId();
 	},
-	isParticipant() {
+	canChange() {
 		const userId = Meteor.userId();
-		return ~this.participants.map((e) => e.userId).indexOf(userId);
+		return userId === this.owner || ~this.participants.map((e) => e.userId).indexOf(userId);
 	},
 	addParticipants() {
-		const instance = Template.instance();
-		return instance.state.get('add participants');
+		return Template.instance().state.get('add participants');
 	},
 	users() {
 		return Meteor.users.find({});
 	},
 	changeLogo() {
-		const instance = Template.instance();
-		return instance.state.get('change logo');
+		return Template.instance().state.get('change logo');
 	},
 	changeNameDisabled() {
-		const instance = Template.instance();
-		return !instance.state.get('change name');
+		return !Template.instance().state.get('change name');
 	}
 });
 
@@ -51,7 +48,6 @@ Template.groupShowForm.events({
 			username: this.username
 		});
 		Meteor.call('groups.update.participants', group._id, participants);
-		Meteor.call('users.update.group', this._id, group._id, group.name);
 	},
 	'click .change-logo'(event, instance) {
   		event.preventDefault();
