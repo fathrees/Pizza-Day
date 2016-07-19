@@ -41,7 +41,13 @@ Meteor.methods({
 	'groups.update.menu'(groupId, menu) {
 		Groups.update(groupId, { $set: { menu: menu } });
 	},
+	'groups.update.orderStatus'(groupId, orderStatus) {
+		Groups.update(groupId, { $set: { orderStatus: orderStatus } });
+	},
 	'groups.remove'(groupId) {
 		Groups.remove(groupId);
+	},
+	'user.update.order'(userId, order) {
+		Meteor.users.update(userId, { $set: { order: order } });
 	}
 });   

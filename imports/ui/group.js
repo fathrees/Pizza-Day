@@ -21,9 +21,7 @@ Template.group.helpers({
 
 Template.group.events({
 	'click .del-group'() {
-		const group = this;
 		Meteor.call('groups.remove', this._id);
-
 	},
 	'click .group'(event, instance) {
 		instance.state.set('collapsedGroup', false);

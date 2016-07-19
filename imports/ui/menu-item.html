@@ -1,27 +1,30 @@
 <template name="menuItem">
 	<div class="row menu-item">
-		<div class="form-group col-sm-5">
+		<div class="form-group col-sm-4">
 			<input form="{{formId}}" type="text" class="form-control" placeholder="Meal name" value="{{this.meal}}" disabled="{{disabled}}">
 		</div>
 		<div class="form-group col-sm-2">
-			<input form="{{formId}}" type="number" min="0.00" value="{{#if this.price}}{{this.price}}{{else}}0.00{{/if}}" step="0.01" class="form-control" disabled="{{disabled}}">
+			<input form="{{formId}}" type="number" min="0.00" value="{{#if this.price}}{{this.price}}{{else}}0{{/if}}" step="0.01" class="form-control" disabled="{{disabled}}">
 		</div>
-		<div class="center-align form-group col-sm-3">
+		<div class="center-align form-group col-sm-2">
 			<input form="{{formId}}" type="checkbox" checked="{{this.couponAvailable}}" disabled="{{disabled}}">
 		</div>
-		{{#if canEdit}}
-			<div class="form-group col-sm-1 right-align">	
+		<div class="form-group col-sm-2">
+			{{#if canOrder}}
+				<input form="{{formId}}" type="number" min="0" value="0" class="form-control">
+			{{/if}}
+		</div>
+		<div class="form-group col-sm-2 right-align">	
+			{{#if canEdit}}
 				<div class="edit" title="Edit item">
 					<span class="glyphicon glyphicon-edit"></span>
 				</div>
-			</div>
-		{{/if}}
-		{{#if canDel}}
-			<div class="form-group col-sm-1 right-align">	
+			{{/if}}
+			{{#if canDel}}
 				<div class="delete" title="Remove item">
 					<span class="glyphicon glyphicon-remove"></span>
 				</div>
-			</div>
-		{{/if}}
+			{{/if}}
+		</div>
 	</div>	
 </template>

@@ -44,11 +44,15 @@
 
 .menu-item > .form-group {margin-bottom: 10px}
 
-.add-menu-item, .add-participants {margin-top: -5px}
+.add-menu-item, .add-participants {
+	margin-top: -5px;
+	margin-bottom: 5px
+}
 
-.add-participants{margin-bottom: 5px}
-
-.delete, .edit {margin-top: 10px}
+.delete, .edit {
+	display: inline-block;
+	margin-top: 10px;
+}
 
 .delete:hover, .del-group:hover, .edit:hover {
 	color: #337ab7;
@@ -68,13 +72,15 @@ select#participants {margin-bottom: 10px}
 .cancel-change-logo {
 	margin-left: -50px;
 	margin-top: 20px;
-
 }
 
-input[name=name].input-lg, .change-name, img#logo, .change-logo {
-	margin-top: 5px;
-}
+input[name=name].input-lg, .change-name, img#logo, .change-logo {margin-top: 5px}
 
 .change-name {margin-left: -25px}
 
 .paticipants-list {margin-top: 8px}
+
+.alert {
+	text-align: center;
+	margin-bottom: 0px;
+}

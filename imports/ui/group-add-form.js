@@ -47,12 +47,12 @@ Template.groupAddForm.events({
 			if (!target[i].value) {
 				continue;
 			}
-			let menuItem = {
+			menu.push({
 				meal: target[i].value,
 				price: target[i + 1].valueAsNumber,
-				couponAvailable: target[i + 2].checked
-			};
-			menu.push(menuItem);
+				couponAvailable: target[i + 2].checked,
+				count: 0
+			});
 		}
 		Meteor.call('groups.insert', groupId, logo, groupName, participants, menu);
 

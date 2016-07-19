@@ -1,8 +1,8 @@
 <template name="groupShowForm">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<form id="{{formId}}" class="show-group row" enctype="multipart/form-data" method="post">
-				<div class="form-group col-md-3">
+			<form id="{{this._id}}" class="show-group row" enctype="multipart/form-data" method="post">
+				<div class="form-group col-md-4">
 					{{#if changeLogo}}
 						<label for="logoShow">Logo</label>
 						<input id="logoShow" name="logo" type="file" accept="image/*,image/jpeg">
@@ -25,21 +25,28 @@
 						</button>
 					{{/if}}
 				</div>
-				<div class="col-md-8">
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="nameShow" class="sr-only"></label>
-							<input id="nameShow" type="text" name="name" class="form-control input-lg" placeholder="Name" value="{{this.name}}" required disabled={{changeNameDisabled}}>
-						</div>
-						<div class="col-sm-1">
-							{{#if isOwner}}
-								<button class="change-name btn btn-lg btn-info" title="Change name">
-									<span class="glyphicon glyphicon-edit"></span>
-								</button>
-							{{/if}}
-						</div>
-						<div class="col-sm-5"></div>
-					</div>
+				<div class="form-group col-md-3">
+					<label for="nameShow" class="sr-only"></label>
+					<input id="nameShow" type="text" name="name" class="form-control input-lg" placeholder="Name" value="{{this.name}}" required disabled={{changeNameDisabled}}>
+				</div>
+				<div class="col-md-1">
+					{{#if isOwner}}
+						<button class="change-name btn btn-lg btn-info" title="Change name">
+							<span class="glyphicon glyphicon-edit"></span>
+						</button>
+					{{/if}}
+				</div>
+				<div class="col-md-2 alert alert-success">
+					{{this.orderStatus}}
+				</div>
+				<div class="col-md-1 right-align">
+					{{#if isOwner}}
+						{{#if canCreateOrder}}
+							<button class="create-order btn btn-lg btn-primary" title="Make an order">
+								<span class="glyphicon glyphicon-cutlery"></span>
+							</button>
+						{{/if}}
+					{{/if}}
 				</div>
 			</form>
 		</div>
@@ -60,6 +67,10 @@
 
 				{{#each this.participants}}
 					{{> participant}}
+				{{else}}
+					<div class="row alert alert-info">
+						<i>No participant</i>
+					</div>
 				{{/each}}
 
 				{{#if addParticipants}}
@@ -75,14 +86,19 @@
 			</div>
 			<div class="col-md-7">
 				<div class="row">
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<label>Menu</label>
 					</div>
 					<div class="col-sm-2">
 						<label>Price</label>
 					</div>
-					<div class="col-sm-3 center-align">
+					<div class="col-sm-2 center-align">
 						<label>Coupon available</label>
+					</div>
+					<div class="col-sm-2">
+						{{#if canOrder}}
+							<label>Count</label>
+						{{/if}}
 					</div>
 					<div class="right-align col-sm-2">
 						{{#if canChange}}
@@ -93,17 +109,16 @@
 					</div>
 				</div>
 				{{#each this.menu}}
-					{{> menuItem}}
-				{{/each}}
-				{{#unless this.menu}}
-					<div class="row center-align alert alert-info">
+					{{> menuItem }}
+				{{else}}
+					<div class="row alert alert-info">
 						<i>No menu item</i>
 					</div>
-				{{/unless}}
+				{{/each}}
 			</div>
 		</div>
 		<div class="panel-footer panel-info">
-			<button form="{{formId}}" type="submit" class="btn-named btn btn-primary">OK</button>
+			<button form="{{this._id}}" type="submit" class="btn-named btn btn-primary">OK</button>
 		</div>
 	</div>
 </template>
