@@ -4,6 +4,12 @@
 			<td><img src="{{logo}}"></td>
 			<td>{{name}}</td>
 			<td>{{ownerName}}</td>
+			<td>{{orderStatus}}</td>
+			<td>
+				{{#if waitOrder}}
+					<span class="glyphicon glyphicon-bell"></span>
+				{{/if}}
+			</td>
 			<td>
 				{{#if isOwner}}
 					<div class="del-group" title="Remove group">

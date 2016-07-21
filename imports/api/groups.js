@@ -17,9 +17,7 @@ Meteor.methods({
 	'groups.insert'(groupId, logo, name, participants, menu) {
 		check(groupId, String);
 		check(name, String);
-		// check(participants, Array);
 		check(menu, Array);
-		//check(img, String); HOW TO CHECK FILE?
 
 		Groups.insert({
 			logo, name, participants, menu,
@@ -47,7 +45,7 @@ Meteor.methods({
 	'groups.remove'(groupId) {
 		Groups.remove(groupId);
 	},
-	'user.update.order'(userId, order) {
+	'users.update.order'(userId, order) {
 		Meteor.users.update(userId, { $set: { order: order } });
 	}
 });   

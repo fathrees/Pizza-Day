@@ -38,12 +38,27 @@
 				</div>
 				<div class="col-md-2 alert alert-success">
 					{{this.orderStatus}}
+					{{#if isParticipant}}
+						{{#if participantOrdered}}
+							<p>You've ordered!</p>
+						{{/if}}
+					{{/if}}
 				</div>
 				<div class="col-md-1 right-align">
 					{{#if isOwner}}
 						{{#if canCreateOrder}}
 							<button class="create-order btn btn-lg btn-primary" title="Make an order">
 								<span class="glyphicon glyphicon-cutlery"></span>
+							</button>
+						{{/if}}
+						{{#if deliver}}
+							<button class="deliver btn btn-lg btn-primary" title="Deliver">
+								<span class="glyphicon glyphicon-send"></span>
+							</button>
+						{{/if}}
+						{{#if delivered}}
+							<button class="delivered btn btn-lg btn-primary" title="Delivered">
+								<span class="glyphicon glyphicon-stop"></span>
 							</button>
 						{{/if}}
 					{{/if}}
@@ -93,22 +108,28 @@
 						<label>Price</label>
 					</div>
 					<div class="col-sm-2 center-align">
-						<label>Coupon available</label>
+						<label>
+							{{#if coupon}}Coupon available
+							{{else}}Add coupon
+							{{/if}}
+						</label>
 					</div>
 					<div class="col-sm-2">
-						{{#if canOrder}}
+						{{#if showCount}}
 							<label>Count</label>
 						{{/if}}
 					</div>
 					<div class="right-align col-sm-2">
 						{{#if canChange}}
-							<button class="add-menu-item btn btn-sm btn-info" title="One more">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
+							{{#unless participantOrdered}}
+								<button class="add-menu-item btn btn-sm btn-info" title="One more">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							{{/unless}}
 						{{/if}}
 					</div>
 				</div>
-				{{#each this.menu}}
+				{{#each menu}}
 					{{> menuItem }}
 				{{else}}
 					<div class="row alert alert-info">
