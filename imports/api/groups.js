@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Email } from 'meteor/email'
 import { check } from 'meteor/check';
 
 export const Groups = new Mongo.Collection('groups');
@@ -47,5 +48,31 @@ Meteor.methods({
 	},
 	'users.update.order'(userId, order) {
 		Meteor.users.update(userId, { $set: { order: order } });
+	},
+	'send.paricipant.email'(email, content) {
+		Meteor.Mandrill.sendTemplate({
+	        "template_name": email.template,
+	        "template_content": [
+	          {}
+	        ],
+	        "message": {
+	            "global_merge_vars": [
+	                {
+	                    // name is the name you gave the variable in your template
+	                    "name": "my",
+	                    "content": content.my
+	                },
+	            ],
+
+	            // Merge vars are per recipient and only needed when you send out
+	            // one email to multiple users
+	            "merge_vars": [
+	              {}
+	            ],
+	            "to": [
+	            {"email": email.receiver}
+	            ]
+	        }
+	    });
 	}
 });   

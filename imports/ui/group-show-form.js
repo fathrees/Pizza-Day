@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './group-show-form.html';
+import './participant-email.html';
 import './menu-item.js';
 import './participant.js';
 
@@ -86,7 +87,56 @@ Template.groupShowForm.events({
 	},
 	'click .deliver'(event) {
 		event.preventDefault();
-		// send e-mail
+		const group = this;
+		const order = group.menu.slice();
+		let total = 0;
+		let discount = 0;
+		order.forEach(item => {
+			item.cost = item.price * item.count;
+			total += item.cost;
+			if (item.couponAdded) {
+				discount += item.price;
+			}
+		});
+		const email = {
+			receiver: Meteor.user().email,
+			template: 'ownerEmail'
+		};
+		const content = {
+			username: group.ownerName,
+			groupName: group.name,
+			order: order,
+			total: total,
+			discount: discount,
+			toPay: total - discount
+		};
+		Meteor.call('send.owner.email', email, content);
+
+		const participantsCount = group.participants.length;
+		group.participants.forEach(user => {
+			const paricipant = Meteor.users.findOne(user.userId);
+			const order = paricipant.order.order.slice();
+			const discount = (discount / participantsCount).toFixed(2);
+			let total = 0;
+			order.forEach(item => {
+				item.cost = item.price * item.count;
+				total += item.cost;
+			});
+			const email = {
+				receiver: paricipant.email,
+				template: 'participantEmail'
+			};
+			const content = {
+				username: user.username,
+				groupName: group.name,
+				owner: group.ownerName,
+				order: order,
+				total: total,
+				discount: discount,
+				toPay: total - discount
+			};
+			Meteor.call('send.paricipant.email', email, content);
+		});
 		Meteor.call('groups.update.orderStatus', this._id, 'delivering');
 	},
 	'click .delivered'(event) {
