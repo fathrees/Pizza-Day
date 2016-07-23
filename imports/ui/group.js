@@ -18,7 +18,8 @@ Template.group.helpers({
 		return Template.instance().state.get('collapsedGroup');
 	},
 	waitOrder() {
-		return this.participants.some(item => item.userId === Meteor.userId()) && !Meteor.user().order.groupId && this.orderStatus === 'ordering';
+		const user = Meteor.user();
+		return this.participants.some(item => item.userId === user._id) && (!user.order || !user.order.groupId) && this.orderStatus === 'ordering';
 	}
 });
 

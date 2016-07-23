@@ -25,13 +25,15 @@ Template.menuItem.helpers({
 	},
 	canEdit() {
 		const group = Template.parentData(1);
-		return group && (group.owner === Meteor.userId() || group.participants.some(e => e.userId === Meteor.userId()))
-			 && !Meteor.user().order.groupId;
+		const user = Meteor.user();
+		return group && (group.owner === user._id || group.participants.some(e => e.userId === user._id))
+			 && (!user.order || !user.order.groupId);
 	},
 	orderCount() {
 		const group = Template.parentData(1);
-		return group && group.participants.some(e => e.userId === Meteor.userId())
-			&& (group.orderStatus === 'ordering' && !Meteor.user().order.groupId
+		const user = Meteor.user();
+		return group && group.participants.some(e => e.userId === user._id)
+			&& (group.orderStatus === 'ordering' && (!user.order || !user.order.groupId)
 				|| group.orderStatus === 'ordered' || group.orderStatus === 'delivering');
 	},
 	ordered() {

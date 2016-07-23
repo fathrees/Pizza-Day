@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { Email } from 'meteor/email'
+// import { Mandrill } from 'meteor/mandrill';
+import { Email } from 'meteor/email';
 import { check } from 'meteor/check';
 
 export const Groups = new Mongo.Collection('groups');
@@ -50,7 +51,8 @@ Meteor.methods({
 		Meteor.users.update(userId, { $set: { order: order } });
 	},
 	'send.paricipant.email'(email, content) {
-		Meteor.Mandrill.sendTemplate({
+		this.unblock();
+		Mandrill.messages.sendTemplate({
 	        "template_name": email.template,
 	        "template_content": [
 	          {}
@@ -58,14 +60,82 @@ Meteor.methods({
 	        "message": {
 	            "global_merge_vars": [
 	                {
-	                    // name is the name you gave the variable in your template
-	                    "name": "my",
-	                    "content": content.my
+	                	"name": "username",
+	                	"content": content.username
 	                },
+	                {
+						"name": "groupName",
+						"content": content.groupName
+					},
+					{
+						"name": "owner",
+						"content": content.owner
+					},
+					{
+						"name": "order",
+						"content": content.order
+					},
+					{
+						"name": "total",
+						"content": content.total
+					},
+					{
+						"name": "discount",
+						"content": content.discount
+					},
+					{
+						"name": "toPay",
+						"content": content.toPay
+	                }
 	            ],
-
-	            // Merge vars are per recipient and only needed when you send out
-	            // one email to multiple users
+	            "merge_vars": [
+	              {}
+	            ],
+	            "to": [
+	            {"email": email.receiver}
+	            ]
+	        }
+	    });
+	},
+	'send.owner.email'(email, content) {
+		this.unblock();
+		Mandrill.messages.sendTemplate({
+	        "template_name": email.template,
+	        "template_content": [
+	          {}
+	        ],
+	        "message": {
+	        	"subject": "Pizza Day",
+	            "global_merge_vars": [
+	                {
+	                	"name": "username",
+	                	"content": content.username
+	                },
+	                {
+						"name": "groupName",
+						"content": content.groupName
+					},
+					{
+						"name": "participants",
+						"content": content.participants
+					},
+					{
+						"name": "order",
+						"content": content.order
+					},
+					{
+						"name": "total",
+						"content": content.total
+					},
+					{
+						"name": "discount",
+						"content": content.discount
+					},
+					{
+						"name": "toPay",
+						"content": content.toPay
+	                }
+	            ],
 	            "merge_vars": [
 	              {}
 	            ],

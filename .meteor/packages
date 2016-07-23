@@ -22,4 +22,5 @@ accounts-password
 accounts-google
 accounts-ui
 random
+wylio:mandrill
 email

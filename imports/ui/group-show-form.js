@@ -4,6 +4,7 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './group-show-form.html';
 import './participant-email.html';
+import './owner-email.html';
 import './menu-item.js';
 import './participant.js';
 
@@ -47,11 +48,13 @@ Template.groupShowForm.helpers({
 		return 'delivering ordered'.indexOf(this.orderStatus) > -1 ? this.menu.filter(item => item.count > 0) : this.menu;
 	},
 	participantOrdered() {
-		return Meteor.user().order.groupId;
+		const hasOrder = Meteor.user().order;
+		return hasOrder && hasOrder.groupId;
 	},
 	showCount() {
-		return this.participants.some(e => e.userId === Meteor.userId()) && this.orderStatus === 'ordering' && !Meteor.user().order.groupId
-			||  this.orderStatus === 'ordered' ||  this.orderStatus === 'delivering';
+		const user = Meteor.user();
+		return this.participants.some(e => e.userId === user._id) && this.orderStatus === 'ordering'
+			&& (!user.order || !user.order.groupId) ||  this.orderStatus === 'ordered' ||  this.orderStatus === 'delivering';
 	},
 	users() {
 		return Meteor.users.find({});
@@ -89,6 +92,7 @@ Template.groupShowForm.events({
 		event.preventDefault();
 		const group = this;
 		const order = group.menu.slice();
+		const participants = group.participants.map(item => item.username);
 		let total = 0;
 		let discount = 0;
 		order.forEach(item => {
@@ -108,34 +112,37 @@ Template.groupShowForm.events({
 			order: order,
 			total: total,
 			discount: discount,
-			toPay: total - discount
+			toPay: total - discount,
+			participants: participants
 		};
 		Meteor.call('send.owner.email', email, content);
-
+		
 		const participantsCount = group.participants.length;
 		group.participants.forEach(user => {
 			const paricipant = Meteor.users.findOne(user.userId);
-			const order = paricipant.order.order.slice();
-			const discount = (discount / participantsCount).toFixed(2);
-			let total = 0;
-			order.forEach(item => {
-				item.cost = item.price * item.count;
-				total += item.cost;
-			});
-			const email = {
-				receiver: paricipant.email,
-				template: 'participantEmail'
-			};
-			const content = {
-				username: user.username,
-				groupName: group.name,
-				owner: group.ownerName,
-				order: order,
-				total: total,
-				discount: discount,
-				toPay: total - discount
-			};
-			Meteor.call('send.paricipant.email', email, content);
+			const order = paricipant.order.order ? paricipant.order.order.slice() : null;
+			if (order) {
+				const discount = (discount / participantsCount).toFixed(2);
+				let total = 0;
+				order.forEach(item => {
+					item.cost = item.price * item.count;
+					total += item.cost;
+				});
+				const email = {
+					receiver: paricipant.email,
+					template: 'participantEmail'
+				};
+				const content = {
+					username: user.username,
+					groupName: group.name,
+					owner: group.ownerName,
+					order: order,
+					total: total,
+					discount: discount,
+					toPay: total - discount
+				};
+				Meteor.call('send.paricipant.email', email, content);
+			}
 		});
 		Meteor.call('groups.update.orderStatus', this._id, 'delivering');
 	},
@@ -168,6 +175,8 @@ Template.groupShowForm.events({
 			const commonMenu = this.menu.filter(item => item.meal); // copy existing menu without empty items that could were created by 'click .add-menu-item'() above 
 			Meteor.call('groups.update.menu', this._id, commonMenu); // update menu in DB without empty items
 
+	  		let hasOrder = Meteor.user().order;
+	  		hasOrder = hasOrder && hasOrder.groupId;
 	  		let currentMenu = [];
 	  		let menuStart = 1;
 			let inputsCount = 3;
@@ -186,10 +195,10 @@ Template.groupShowForm.events({
 		  			Meteor.call('groups.update.name', this._id, newName);
 		  		}
 		  	}
-		  	if (ordering && !Meteor.user().order.groupId) {
+		  	if (ordering && !hasOrder) {
 		  		inputsCount++;
 		  	}
-		  	if (!this.orderStatus || this.orderStatus === 'delivered' || ordering && !Meteor.user().order.groupId) {
+		  	if (!this.orderStatus || this.orderStatus === 'delivered' || ordering && !hasOrder) {
 				for (let i = menuStart; i < target.length - 1; i += inputsCount) { // create current menu
 					if (!target[i].value || ordering && !target[i + 3].valueAsNumber) {
 						continue;
