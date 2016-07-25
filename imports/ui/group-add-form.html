@@ -3,19 +3,15 @@
 		<div class="panel-heading">
 			<h4 class="head-title">Create Group</h4>
 			<form id="addGroup" class="new-group row" enctype="multipart/form-data" method="post">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-4 col-sm-5">
 					<label for="logo">Logo</label>
 					<input id="logo" type="file" name="img" accept="image/*,image/jpeg">
 				</div>
-				<div class="col-md-8">
-					<div class="row">
-						<div class="form-group col-sm-7">
-							<label for="name" class="sr-only"></label>
-							<input id="name" type="text" name="name" class="form-control input-lg" placeholder="Name" required>
-						</div>
-						<div class="col-sm-5"></div>
-					</div>
+				<div class="col-md-4 col-sm-7">
+					<label for="name" class="sr-only"></label>
+					<input id="name" type="text" name="name" class="form-control input-lg" placeholder="Name" required>
 				</div>
+				<div class="col-md-4"></div>
 			</form>
 		</div>
 		<div class="row panel-body">
@@ -29,17 +25,18 @@
 			</div>
 			<div class="col-md-7">
 				<div class="row">
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<label>Add menu item</label>
 					</div>
 					<div class="col-sm-2">
 						<label>Price</label>
 					</div>
-					<div class="col-sm-3 center-align">
+					<div class="col-sm-2 center-align">
 						<label>Coupon available</label>
 					</div>
+					<div class="col-sm-2"></div>
 					<div class="right-align col-sm-2">
-						<button class="add-menu-item btn btn-sm btn-info" title="One more">
+						<button class="add-menu-item btn btn-sm btn-info" title="New item">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
 					</div>

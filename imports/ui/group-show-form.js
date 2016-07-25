@@ -16,10 +16,6 @@ Template.groupShowForm.helpers({
 	addParticipants() {
 		return Template.instance().state.get('add participants');
 	},
-	canChange() {
-		const userId = Meteor.userId();
-		return userId === this.owner || this.participants.some(e => e.userId === userId);
-	},
 	canCreateOrder() {
 		return !this.orderStatus || this.orderStatus === 'delivered';
 	},
@@ -28,9 +24,6 @@ Template.groupShowForm.helpers({
 	},
 	changeNameDisabled() {
 		return !Template.instance().state.get('change name');
-	},
-	coupon() {
-		return !this.orderStatus || this.orderStatus === 'ordering' || this.orderStatus === 'delivered';
 	},
 	deliver() {
 		return this.orderStatus === 'ordered';
@@ -41,20 +34,27 @@ Template.groupShowForm.helpers({
 	isOwner() {
 		return this.owner === Meteor.userId();
 	},
-	isParticipant() {
-		return this.participants.some(e => e.userId === Meteor.userId());
-	},
 	menu() {
 		return 'delivering ordered'.indexOf(this.orderStatus) > -1 ? this.menu.filter(item => item.count > 0) : this.menu;
 	},
+	notOrdered() {
+		return !this.orderStatus || this.orderStatus === 'ordering' || this.orderStatus === 'delivered';
+	},
+	canAddItem() {
+		const user = Meteor.user();
+		const isParticipant =  this.participants.some(e => e.userId === user._id);
+		return (this.owner === user._id || isParticipant)
+			&& (!this.orderStatus || this.orderStatus === 'delivered'
+				|| this.orderStatus === 'ordering' && isParticipant && (!user.order || !user.order.groupId));
+	},
 	participantOrdered() {
-		const hasOrder = Meteor.user().order;
-		return hasOrder && hasOrder.groupId;
+		const user = Meteor.user();
+		return this.participants.some(e => e.userId === user._id) && user.order && user.order.groupId;
 	},
 	showCount() {
 		const user = Meteor.user();
-		return this.participants.some(e => e.userId === user._id) && this.orderStatus === 'ordering'
-			&& (!user.order || !user.order.groupId) ||  this.orderStatus === 'ordered' ||  this.orderStatus === 'delivering';
+		return this.orderStatus === 'ordering' && this.participants.some(e => e.userId === user._id) && (!user.order || !user.order.groupId)
+			|| this.orderStatus === 'ordered' || this.orderStatus === 'delivering';
 	},
 	users() {
 		return Meteor.users.find({});
@@ -115,7 +115,7 @@ Template.groupShowForm.events({
 			toPay: total - discount,
 			participants: participants
 		};
-		Meteor.call('send.owner.email', email, content);
+		//Meteor.call('send.owner.email', email, content);////////////////////Mandrill is undefined!!!!!!!!!!!!
 		
 		const participantsCount = group.participants.length;
 		group.participants.forEach(user => {
@@ -141,7 +141,7 @@ Template.groupShowForm.events({
 					discount: discount,
 					toPay: total - discount
 				};
-				Meteor.call('send.paricipant.email', email, content);
+				// Meteor.call('send.paricipant.email', email, content);/Mandrill is undefined!!!!!!!!!!!!
 			}
 		});
 		Meteor.call('groups.update.orderStatus', this._id, 'delivering');
@@ -188,7 +188,9 @@ Template.groupShowForm.events({
 	  			}
 	  			if (instance.state.get('change logo')) {
 		  			menuStart++;
-		  			Meteor.call('groups.update.logo', this._id, target.logo.value);
+		  			const reader = new FileReader();
+					reader.onload = () => Meteor.call('groups.update.logo', this._id, reader.result);
+					reader.readAsDataURL(target.logoShow.files[0]);
 		  		}
 	  			const newName = target.name.value;
 		  		if (newName !== this.name) {

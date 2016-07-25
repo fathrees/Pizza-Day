@@ -1,5 +1,8 @@
 /* CSS declarations go here */
 
+body {
+	background: #fff url("/img/pizza.jpg") repeat-x;
+}
 .navbar-inverse {
 	background-color: #d9edf7;
 	border-color: #d9edf7;
@@ -22,6 +25,7 @@
 }
 
 .panel > div {padding: 10px 30px}
+.panel {margin:0}
 
 .panel-footer {
 	background-color: #d9edf7;
@@ -59,8 +63,6 @@
 	cursor: pointer;
 }
 
-select#participants {margin-bottom: 10px}
-
 .menu-item input[type=checkbox] {margin-top: 10px}
 
 .right-align {text-align: right}
@@ -69,18 +71,44 @@ select#participants {margin-bottom: 10px}
 
 .btn-named {width: 70px}
 
-.cancel-change-logo {
-	margin-left: -50px;
-	margin-top: 20px;
+button.cancel-change-logo {margin-top: 20px}
+
+div.cancel-change-logo {padding-left: 0}
+
+input[name=name].input-lg, .change-name, img#logo, .change-logo, .order-event, div.col-md-3.alert.alert-success {margin-top: 5px}
+
+div.col-md-3.alert.alert-success {
+	padding: 5px;
+	min-height: 46px;
 }
-
-input[name=name].input-lg, .change-name, img#logo, .change-logo {margin-top: 5px}
-
-.change-name {margin-left: -25px}
-
-.paticipants-list {margin-top: 8px}
-
 .alert {
 	text-align: center;
 	margin-bottom: 0px;
 }
+
+div.panel-heading > form > div {padding-right:0}
+
+div.order-event.col-md-1 {padding-right: 15px}
+
+img {height: 50px}
+
+div.participants-label {margin-bottom: 20px}
+
+thead {color: #aaa}
+
+td#groupForm {
+	padding: 0;
+	padding-bottom: 5px;
+}
+
+div.participants-list {
+	/*line-height: 10px;*/
+	margin-bottom: 8px;
+}
+
+div.participant {display: inline-block}
+
+select {margin-bottom: 8px}
+
+.red-label {color: red;}
+

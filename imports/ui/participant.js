@@ -3,8 +3,9 @@ import { Template } from 'meteor/templating';
 import './participant.html';
 
 Template.participant.helpers({
-	isOwner() {
-		return Template.parentData(1).owner === Meteor.userId();
+	canDel() {
+		const group = Template.parentData(1);
+		return group.owner === Meteor.userId() && (!group.orderStatus || 'ordering delivered'.indexOf(group.orderStatus) > -1);
 	},
 	isYourself() {
 		return this.userId === Meteor.userId();

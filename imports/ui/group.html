@@ -10,7 +10,7 @@
 					<span class="glyphicon glyphicon-bell"></span>
 				{{/if}}
 			</td>
-			<td>
+			<td class="right-align">
 				{{#if isOwner}}
 					<div class="del-group" title="Remove group">
 						<span class="glyphicon glyphicon-remove"></span>
@@ -18,7 +18,7 @@
 				{{/if}}
 			</td>
 		{{else}}
-			<td colspan="4">{{> groupShowForm}}</td>
+			<td id="groupForm" colspan="6">{{> groupShowForm}}</td>
 		{{/if}}
 	</tr>
 </template>

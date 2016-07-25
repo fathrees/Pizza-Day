@@ -1,14 +1,16 @@
 <template name="participant">
-	<span class="glyphicon glyphicon-user"></span>
-	{{username}}
+	<div class="participant">
+		<span class="glyphicon glyphicon-user"></span>
+		{{username}}
 
-	{{#if isYourself}}
-		<i> - yourself</i>&nbsp;
-	{{/if}}
+		{{#if isYourself}}
+			<i> - yourself</i>&nbsp;
+		{{/if}}
 
-	{{#if isOwner}}
-		<span class="delete del-participant" title="Remove participant">
-			<span class="glyphicon glyphicon-remove"></span>
-		</span>
-	{{/if}}
+		{{#if canDel}}
+			<span class="delete del-participant" title="Remove participant">
+				<span class="glyphicon glyphicon-remove"></span>
+			</span>
+		{{/if}}
+	</div>
 </template>

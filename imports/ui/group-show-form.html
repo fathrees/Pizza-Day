@@ -2,12 +2,12 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<form id="{{this._id}}" class="show-group row" enctype="multipart/form-data" method="post">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3 col-sm-5">
 					{{#if changeLogo}}
 						<label for="logoShow">Logo</label>
 						<input id="logoShow" name="logo" type="file" accept="image/*,image/jpeg">
 					{{else}}
-						<img id="logo" src="{{#if this.logo}}{{this.logo}}{{else}}/img/no-logo.png{{/if}}">
+						<img id="logo" src="{{#if logo}}{{logo}}{{else}}/img/no-logo.png{{/if}}">
 					{{/if}}
 
 					{{#if isOwner}}
@@ -18,36 +18,34 @@
 						{{/unless}}
 					{{/if}}
 				</div>
-				<div class="col-md-1">
+				<div class="col-md-1 col-sm-1 cancel-change-logo">
 					{{#if changeLogo}}
 						<button class="cancel-change-logo btn btn-sm btn-default" title="Cancel changing">
 								<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					{{/if}}
 				</div>
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-3 col-sm-5">
 					<label for="nameShow" class="sr-only"></label>
 					<input id="nameShow" type="text" name="name" class="form-control input-lg" placeholder="Name" value="{{this.name}}" required disabled={{changeNameDisabled}}>
 				</div>
-				<div class="col-md-1">
+				<div class="col-md-1 col-sm-1">
 					{{#if isOwner}}
 						<button class="change-name btn btn-lg btn-info" title="Change name">
 							<span class="glyphicon glyphicon-edit"></span>
 						</button>
 					{{/if}}
 				</div>
-				<div class="col-md-2 alert alert-success">
-					{{this.orderStatus}}
-					{{#if isParticipant}}
-						{{#if participantOrdered}}
-							<p>You've ordered!</p>
-						{{/if}}
+				<div class="col-md-3 col-sm-11 {{#if orderStatus}}alert alert-success{{/if}}">
+					{{orderStatus}}
+					{{#if participantOrdered}}
+						<p>You've ordered!</p>
 					{{/if}}
 				</div>
-				<div class="col-md-1 right-align">
+				<div class="order-event col-md-1 col-sm-1 right-align">
 					{{#if isOwner}}
 						{{#if canCreateOrder}}
-							<button class="create-order btn btn-lg btn-primary" title="Make an order">
+							<button class="create-order btn btn-lg btn-primary" title="New order">
 								<span class="glyphicon glyphicon-cutlery"></span>
 							</button>
 						{{/if}}
@@ -68,35 +66,41 @@
 		<div class="row panel-body">
 			<div class="form-group col-md-5">
 				<div class="row">
-					<div class="col-sm-4">
+					<div class="col-sm-2">
 						{{#if isOwner}}
-							<button class="add-participants btn btn-sm btn-info" title="Add participants">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
+							{{#if notOrdered}}
+								<button class="add-participants btn btn-sm btn-info" title="Add participants">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							{{/if}}
 						{{/if}}
 					</div>
-					<div class="col-sm-8">
+					<div class="col-sm-10 participants-label">
 						<label>Participants</label><br>
 					</div>
 				</div>
 
-				{{#each this.participants}}
-					{{> participant}}
-				{{else}}
-					<div class="row alert alert-info">
-						<i>No participant</i>
-					</div>
-				{{/each}}
+				<div class="participants-list">
+					{{#each this.participants}}
+						{{> participant}}
+					{{else}}
+						<div class="row alert alert-info">
+							<i>No participant</i>
+						</div>
+					{{/each}}
+				</div>
 
 				{{#if addParticipants}}
-					<div class="participants-list center-align">
-						<label for="participantsShow" class="">Select participants</label>
-					</div>
-					<select id="participantsShow" multiple class="form-control">
-						{{#each users}}
-							{{> user}}
-						{{/each}}
-					</select>
+					{{#if notOrdered}}
+						<div class="center-align">
+							<label for="participantsShow">Select participants</label>
+						</div>
+						<select id="participantsShow" multiple class="form-control">
+							{{#each users}}
+								{{> user}}
+							{{/each}}
+						</select>
+					{{/if}}
 				{{/if}}
 			</div>
 			<div class="col-md-7">
@@ -109,8 +113,10 @@
 					</div>
 					<div class="col-sm-2 center-align">
 						<label>
-							{{#if coupon}}Coupon available
-							{{else}}Add coupon
+							{{#if notOrdered}}Coupon available
+							{{else}}
+								{{#unless delivered}}<span class="{{#if isOwner}}red-label{{/if}}">Add coupon</span>
+								{{else}}<span>Add coupon</span>{{/unless}}
 							{{/if}}
 						</label>
 					</div>
@@ -120,12 +126,10 @@
 						{{/if}}
 					</div>
 					<div class="right-align col-sm-2">
-						{{#if canChange}}
-							{{#unless participantOrdered}}
-								<button class="add-menu-item btn btn-sm btn-info" title="One more">
-									<span class="glyphicon glyphicon-plus"></span>
-								</button>
-							{{/unless}}
+						{{#if canAddItem}}
+							<button class="add-menu-item btn btn-sm btn-info" title="New item">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
 						{{/if}}
 					</div>
 				</div>

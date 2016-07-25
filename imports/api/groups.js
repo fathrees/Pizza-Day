@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-// import { Mandrill } from 'meteor/mandrill';
 import { Email } from 'meteor/email';
 import { check } from 'meteor/check';
 
@@ -50,7 +49,7 @@ Meteor.methods({
 	'users.update.order'(userId, order) {
 		Meteor.users.update(userId, { $set: { order: order } });
 	},
-	'send.paricipant.email'(email, content) {
+	'send.paricipant.email'(email, content) {/////////////Mandrill is undefined!!!!
 		this.unblock();
 		Mandrill.messages.sendTemplate({
 	        "template_name": email.template,
@@ -58,6 +57,7 @@ Meteor.methods({
 	          {}
 	        ],
 	        "message": {
+	        	"subject": "Pizza Day",
 	            "global_merge_vars": [
 	                {
 	                	"name": "username",

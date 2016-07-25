@@ -27,9 +27,9 @@ Template.groupAddForm.events({
 		const target = event.target;
 		const groupId = Random.id();
 		const groupName = target.name.value;
-		const logo = target.logo.value;
+		const logo = target.logo.files[0];
 		const participantsDOM = target.participants.selectedOptions;
-		const participants = [];
+		let participants = [];
 		
 		for (let i = 0; i < participantsDOM.length; i++) {
 			let participantId = participantsDOM[i].value;
@@ -40,7 +40,7 @@ Template.groupAddForm.events({
 			});
 		}
 
-		const menu = [];
+		let menu = [];
 		const start = 3;
 		const inputsCount = 3;
 		for (i = start; i < target.length - 1; i += inputsCount) {
@@ -54,7 +54,13 @@ Template.groupAddForm.events({
 				count: 0
 			});
 		}
-		Meteor.call('groups.insert', groupId, logo, groupName, participants, menu);
+
+		const reader = new FileReader();
+		reader.onload = event => {
+			let bufferedLogo = reader.result;
+			Meteor.call('groups.insert', groupId, bufferedLogo, groupName, participants, menu);
+		}
+		reader.readAsDataURL(logo);
 
 		target.logo.value = '';
 		target.name.value = '';

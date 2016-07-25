@@ -26,14 +26,14 @@ Template.menuItem.helpers({
 	canEdit() {
 		const group = Template.parentData(1);
 		const user = Meteor.user();
-		return group && (group.owner === user._id || group.participants.some(e => e.userId === user._id))
-			 && (!user.order || !user.order.groupId);
+		const isParticipant = group ? group.participants.some(e => e.userId === user._id) : false;
+		return group && ((group.owner === user._id || isParticipant) && (!group.orderStatus || group.orderStatus ==='delivered'
+			|| group.orderStatus ==='ordering' && isParticipant && (!user.order || !user.order.groupId)));
 	},
 	orderCount() {
 		const group = Template.parentData(1);
 		const user = Meteor.user();
-		return group && group.participants.some(e => e.userId === user._id)
-			&& (group.orderStatus === 'ordering' && (!user.order || !user.order.groupId)
+		return group && (group.orderStatus === 'ordering' && group.participants.some(e => e.userId === user._id) && (!user.order || !user.order.groupId)
 				|| group.orderStatus === 'ordered' || group.orderStatus === 'delivering');
 	},
 	ordered() {
