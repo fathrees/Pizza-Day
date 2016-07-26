@@ -1,7 +1,7 @@
 <template name="group">
 	<tr class="group">
 		{{#if collapsedGroup}}
-			<td><img src="{{logo}}"></td>
+			<td><img src="{{#if logo}}{{logo}}{{else}}/img/no-logo.png{{/if}}"></td>
 			<td>{{name}}</td>
 			<td>{{ownerName}}</td>
 			<td>{{orderStatus}}</td>

@@ -20,12 +20,13 @@ Meteor.methods({
 		check(name, String);
 		check(menu, Array);
 
+		const owner = Meteor.users.findOne(this.userId);
 		Groups.insert({
 			logo, name, participants, menu,
 			_id: groupId, 
 			createdAt: new Date(),
 			owner: this.userId,
-			ownerName: Meteor.users.findOne(this.userId).username
+			ownerName: owner.username || owner.services.google.name
 		});
 	},
 	'groups.update.logo'(groupId, logo) {

@@ -57,7 +57,10 @@ Template.groupShowForm.helpers({
 			|| this.orderStatus === 'ordered' || this.orderStatus === 'delivering';
 	},
 	users() {
-		return Meteor.users.find({});
+		return Meteor.users.find({}, {username: 1, services: 1}).map(item => ({
+				_id: item._id,
+				username: item.username || item.services.google.name
+			}));
 	},
 });
 
@@ -90,46 +93,62 @@ Template.groupShowForm.events({
 	},
 	'click .deliver'(event) {
 		event.preventDefault();
+		const owner = Meteor.user();
 		const group = this;
 		const order = group.menu.slice();
 		const participants = group.participants.map(item => item.username);
 		let total = 0;
 		let discount = 0;
-		order.forEach(item => {
-			item.cost = item.price * item.count;
-			total += item.cost;
-			if (item.couponAdded) {
-				discount += item.price;
+		for (var i = 0; i < order.length; i++) {
+			if (order[i].count) {
+				order[i].cost = order[i].price * order[i].count;
+				total += order[i].cost;
+				if (order[i].couponAdded) {
+					discount += order[i].price;
+				}
+				continue;
 			}
-		});
+			order.splice(i, 1);
+			i--;
+		}
 		const email = {
-			receiver: Meteor.user().email,
+			receiver: owner.emails ? owner.emails[0].address : owner.services.google.email,
 			template: 'ownerEmail'
 		};
 		const content = {
 			username: group.ownerName,
 			groupName: group.name,
 			order: order,
-			total: total,
-			discount: discount,
-			toPay: total - discount,
+			total: total.toFixed(2),
+			discount: discount.toFixed(2),
+			toPay: (total - discount).toFixed(2),
 			participants: participants
 		};
+		console.log("CREATOR");
+		console.log(email);
+		console.log(content);
 		//Meteor.call('send.owner.email', email, content);////////////////////Mandrill is undefined!!!!!!!!!!!!
 		
-		const participantsCount = group.participants.length;
+		let participantsCount = group.participants.length;
 		group.participants.forEach(user => {
-			const paricipant = Meteor.users.findOne(user.userId);
-			const order = paricipant.order.order ? paricipant.order.order.slice() : null;
+			const participant = Meteor.users.findOne({_id: user.userId}, {username: 1, emails: 1, services: 1, order: 1});
+			let order = participant.order.order;
 			if (order) {
-				const discount = (discount / participantsCount).toFixed(2);
+				order = participant.order.order.slice();
+			} else {
+				order = null;
+				participantsCount--;
+			}
+			if (order) {
+				const partDiscount = (discount / participantsCount).toFixed(2);
+
 				let total = 0;
 				order.forEach(item => {
 					item.cost = item.price * item.count;
 					total += item.cost;
 				});
 				const email = {
-					receiver: paricipant.email,
+					receiver: participant.emails ? participant.emails[0].address : participant.services.google.email,
 					template: 'participantEmail'
 				};
 				const content = {
@@ -137,10 +156,13 @@ Template.groupShowForm.events({
 					groupName: group.name,
 					owner: group.ownerName,
 					order: order,
-					total: total,
-					discount: discount,
-					toPay: total - discount
+					total: total.toFixed(2),
+					discount: partDiscount,
+					toPay: (total - partDiscount).toFixed(2)
 				};
+				console.log("PARTICIPANT");
+				console.log(email);
+				console.log(content);
 				// Meteor.call('send.paricipant.email', email, content);/Mandrill is undefined!!!!!!!!!!!!
 			}
 		});
@@ -217,7 +239,7 @@ Template.groupShowForm.events({
 					currentMenu = currentMenu.filter(item => item.count > 0); // create own user's order
 					Meteor.call('users.update.order', userId, {
 						groupId: this._id,
-						order: currentMenu
+						order: currentMenu.length ? currentMenu : null
 					});
 					if (this.participants.every(item => Meteor.users.findOne(item.userId).order.groupId)) {
 						Meteor.call('groups.update.orderStatus', this._id, 'ordered');

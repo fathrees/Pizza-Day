@@ -11,7 +11,10 @@ Menu.insert({});
 
 Template.groupAddForm.helpers({
 	users() {
-		return Meteor.users.find({});
+		return Meteor.users.find({}, {username: 1, services: 1}).map(item => ({
+				_id: item._id,
+				username: item.username || item.services.google.name
+			}));
 	},
 	menu() {
 		return Menu.find({});
@@ -33,7 +36,8 @@ Template.groupAddForm.events({
 		
 		for (let i = 0; i < participantsDOM.length; i++) {
 			let participantId = participantsDOM[i].value;
-			let participantUsername = Meteor.users.findOne(participantId).username;
+			let participant = Meteor.users.findOne(participantId);
+			let participantUsername = participant.username || participant.services.google.name;
 			participants.push({
 				userId: participantId,
 				username: participantUsername
@@ -55,14 +59,17 @@ Template.groupAddForm.events({
 			});
 		}
 
-		const reader = new FileReader();
-		reader.onload = event => {
-			let bufferedLogo = reader.result;
-			Meteor.call('groups.insert', groupId, bufferedLogo, groupName, participants, menu);
+		if (logo) {
+			const reader = new FileReader();
+			reader.onload = event => {
+				let logo = reader.result;
+				Meteor.call('groups.insert', groupId, logo, groupName, participants, menu);
+			}
+			reader.readAsDataURL(logo);
+		} else {
+			Meteor.call('groups.insert', groupId, null, groupName, participants, menu);
 		}
-		reader.readAsDataURL(logo);
-
-		target.logo.value = '';
 		target.name.value = '';
+		target.logo.value = '';
 	}
 });     
